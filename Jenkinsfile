@@ -1,49 +1,22 @@
 pipeline {
     agent any
     stages {
-        stage('Build') {
+        stage('Demo') {
             steps {
-                echo 'Building…'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo 'Running Tests…'
+                echo 'Testing Extended Email Plugin…'
             }
             post {
                 always {
                     emailext(
                         to: 'ahnafshahriardip@gmail.com',
-                        subject: "Jenkins: Test Stage ${currentBuild.currentResult}",
-                        body: """<p>The Test stage finished with status: <b>${currentBuild.currentResult}</b>.</p>
-                                 <p>Full console log attached.</p>""",
+                        subject: "Email-ext Test – ${currentBuild.fullDisplayName}",
+                        body: """<p>Hello Ahnaf,</p>
+                                 <p>This is a test email sent from the
+                                 <b>Extended Email plugin</b>.</p>
+                                 <p>Build result: ${currentBuild.currentResult}</p>""",
                         attachLog: true
                     )
                 }
-            }
-        }
-
-        stage('Security Scan') {
-            steps {
-                echo 'Running Security Scan…'
-            }
-            post {
-                always {
-                    emailext(
-                        to: 'ahnafshahriardip@gmail.com',
-                        subject: "Jenkins: Security Scan ${currentBuild.currentResult}",
-                        body: """<p>Security scan finished with status: <b>${currentBuild.currentResult}</b>.</p>
-                                 <p>Full console log attached.</p>""",
-                        attachLog: true
-                    )
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying…'
             }
         }
     }

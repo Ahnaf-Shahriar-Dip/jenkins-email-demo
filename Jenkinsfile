@@ -6,34 +6,41 @@ pipeline {
                 echo 'Building…'
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Running tests…'
+                echo 'Running Tests…'
             }
             post {
                 always {
-                    // Send email at end of Test stage
-                    mail to: 'ahnafshahriardip@gmail.com',
-                         subject: "Jenkins Test Stage: ${currentBuild.currentResult}",
-                         body: """The Test stage finished with status: ${currentBuild.currentResult}.
-Full console output: ${env.BUILD_URL}console"""
+                    emailext(
+                        to: 'ahnafshahriardip@gmail.com',
+                        subject: "Jenkins: Test Stage ${currentBuild.currentResult}",
+                        body: """<p>The Test stage finished with status: <b>${currentBuild.currentResult}</b>.</p>
+                                 <p>Full console log attached.</p>""",
+                        attachLog: true
+                    )
                 }
             }
         }
+
         stage('Security Scan') {
             steps {
-                echo 'Running security scan…'
+                echo 'Running Security Scan…'
             }
             post {
                 always {
-                    // Send email at end of Security Scan stage
-                    mail to: 'ahnafshahriardip@gmail.com',
-                         subject: "Jenkins Security Scan: ${currentBuild.currentResult}",
-                         body: """Security scan finished with status: ${currentBuild.currentResult}.
-Full console output: ${env.BUILD_URL}console"""
+                    emailext(
+                        to: 'ahnafshahriardip@gmail.com',
+                        subject: "Jenkins: Security Scan ${currentBuild.currentResult}",
+                        body: """<p>Security scan finished with status: <b>${currentBuild.currentResult}</b>.</p>
+                                 <p>Full console log attached.</p>""",
+                        attachLog: true
+                    )
                 }
             }
         }
+
         stage('Deploy') {
             steps {
                 echo 'Deploying…'
